@@ -61,6 +61,10 @@
             <input type="hidden" name="_csrf" value="${_csrf.token}"/>
             <input type="submit" value="Add item"/>
         </form>
+        <form action="/debug/print_summary" method="POST">
+            <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+            <input type="submit" value="Print summary"/>
+        </form>
 
         <script type="text/javascript">
             function onPrintClick() {
