@@ -16,7 +16,9 @@ public class User implements UserDetails {
 
     private String username;
     private String password;
-    private boolean active;
+    private Boolean active;
+    private String lastPollTime;
+    private Integer votesLimit;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
@@ -28,6 +30,14 @@ public class User implements UserDetails {
     }
     public User setId (Long id) {
         this.id = id;
+        return this;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+    public User setRoles(Set<Role> roles) {
+        this.roles = roles;
         return this;
     }
 
@@ -47,19 +57,27 @@ public class User implements UserDetails {
         return this;
     }
 
-    public boolean isActive() {
+    public Boolean isActive() {
         return active;
     }
-    public User setActive(boolean active) {
+    public User setActive(Boolean active) {
         this.active = active;
         return this;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public Integer getVotesLimit() {
+        return votesLimit;
     }
-    public User setRoles(Set<Role> roles) {
-        this.roles = roles;
+    public User setVotesLimit(Integer votesLimit) {
+        this.votesLimit = votesLimit;
+        return this;
+    }
+
+    public String getLastPollTime() {
+        return lastPollTime;
+    }
+    public User setLastPollTime(String lastPollTime) {
+        this.lastPollTime = lastPollTime;
         return this;
     }
 

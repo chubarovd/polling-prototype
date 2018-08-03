@@ -1,6 +1,7 @@
 package com.polling.polling_project.controllers;
 
 import com.polling.polling_project.domain.Item;
+import com.polling.polling_project.domain.User;
 import com.polling.polling_project.domain.Vote;
 import com.polling.polling_project.repos.ItemRepo;
 import com.polling.polling_project.repos.UserRepo;
@@ -36,7 +37,7 @@ public class DebugController {
     @PostMapping ("/add")
     public String addItem (Item item) {
         itemRepo.save (item);
-        System.out.println ("~ Item: [ " + item.getContent() + " ] added");
+        System.out.println ("~ Item: id: [ " + item.getId() + " ] content: [" + item.getContent() + " ] added");
         return "redirect:/polling";
     }
 
@@ -56,6 +57,13 @@ public class DebugController {
             }
             System.out.println("[ " + item + " ] votes: [ " + summary + " ]");
         }
+        return "redirect:/polling";
+    }
+
+    @PostMapping ("/print_users")
+    public String printUsers () {
+        for (User user : userRepo.findAll())
+            System.out.println("id:[" + user.getId() + "] username:["+ user.getUsername() +"] vote date:["+user.getLastPollTime()+"]");
         return "redirect:/polling";
     }
 }

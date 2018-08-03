@@ -15,7 +15,7 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername (String username) {
-        User user =userRepo.findByUsername (username);
+        User user = userRepo.findByUsername (username);
         if (user != null) {
             return user;
         } else {
