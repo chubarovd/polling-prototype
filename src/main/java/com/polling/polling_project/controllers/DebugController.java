@@ -7,13 +7,9 @@ import com.polling.polling_project.repos.ItemRepo;
 import com.polling.polling_project.repos.UserRepo;
 import com.polling.polling_project.repos.VotesRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import javax.xml.bind.SchemaOutputResolver;
 
 @Controller
 @RequestMapping("/debug")
@@ -55,7 +51,7 @@ public class DebugController {
             for (Vote vote : votesRepo.findByItem(item)) {
                 summary += vote.getCount();
             }
-            System.out.println("[ " + item + " ] votes: [ " + summary + " ]");
+            System.out.println("    [ " + item + " ] votes: [ " + summary + " ]");
         }
         return "redirect:/polling";
     }
@@ -64,7 +60,7 @@ public class DebugController {
     public String printUsers () {
         System.out.println("~ Users :");
         for (User user : userRepo.findAll())
-            System.out.println("id:[" + user.getId() + "] username:["+ user.getUsername() +"] vote date:["+user.getLastPollTime()+"]");
+            System.out.println("    id:[" + user.getId() + "] username:["+ user.getUsername() +"] vote date:["+user.getLastPollTime()+"]");
         return "redirect:/polling";
     }
 }
