@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping ("/polling")
@@ -45,7 +46,7 @@ public class PollingController {
 
     @PostMapping ("/save_votes")
     public ResponseEntity<?> saveVotes (@AuthenticationPrincipal User user,
-                                        @RequestBody HashMap<?, ? extends List<? extends Integer>> attributes) {
+                             @RequestBody HashMap<?, ? extends List<? extends Integer>> attributes) {
         int summary = 0;
         for (Integer count : attributes.get("list")) {
             if (count < 0) return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
@@ -54,7 +55,6 @@ public class PollingController {
         if (summary > user.getVotesLimit ()) return new ResponseEntity<> (HttpStatus.BAD_REQUEST);
 
         votesRepo.deleteAll(votesRepo.findByAuthor(user));
-
         int i = 0;
         for (Item item : itemRepo.findAll ()) {
             try {
@@ -72,7 +72,7 @@ public class PollingController {
             }
         }
 
-        userRepo.updateTitle(user.getId(), ZonedDateTime.now ().toString ());
+        userRepo.updateLastPollTime (user.getId(), ZonedDateTime.now ().toString ());
         return new ResponseEntity<> (HttpStatus.OK);
     }
 }

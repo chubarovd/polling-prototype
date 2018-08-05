@@ -43,7 +43,7 @@ public class DebugController {
 
     @PostMapping ("/print_votes")
     public String printVotes () {
-        System.out.println ("~ Votes: \n" + votesRepo.findAll());
+        System.out.println ("~ Votes : \n" + votesRepo.findAll());
         return "redirect:/polling";
     }
 
@@ -62,6 +62,7 @@ public class DebugController {
 
     @PostMapping ("/print_users")
     public String printUsers () {
+        System.out.println("~ Users :");
         for (User user : userRepo.findAll())
             System.out.println("id:[" + user.getId() + "] username:["+ user.getUsername() +"] vote date:["+user.getLastPollTime()+"]");
         return "redirect:/polling";

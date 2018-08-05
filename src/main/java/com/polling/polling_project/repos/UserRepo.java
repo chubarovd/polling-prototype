@@ -14,5 +14,5 @@ public interface UserRepo extends CrudRepository<User, Long> {
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.lastPollTime=:date WHERE u.id=:id")
-    void updateTitle (@Param("id") Long id, @Param("date") String date);
+    void updateLastPollTime(@Param("id") Long id, @Param("date") String date);
 }

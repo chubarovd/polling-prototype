@@ -1,4 +1,6 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/action_macro.ftl" as action>
+<#import "parts/login.ftl" as login>
 
 <@c.page "Login Page">
     <div>
@@ -7,19 +9,7 @@
         </form>
     </div>
 
-    <p>You need sign in to polling</p>
-    <form action="/login" method="POST">
-        <div><label>
-            User Name : <input type="text" name="username" value="<#if user??>${user.getUsername()}</#if>"/>
-            </label></div>
-        <div><label>
-            Password: <input type="password" name="password" value="<#if user??>${user.getPassword()}</#if>"/> </label></div>
-        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <div><input type="submit" value="Sign In"/></div>
-    </form>
-
-    <form action="/debug/cleardb" method="POST">
-        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-        <input type="submit" value="Clear DB(for debug)"/>
-    </form>
+    <h4>You need sign in to polling</h4>
+    <@login.form "login" "Sign In"/>
+    <@action.debug "cleardb"/>
 </@c.page>

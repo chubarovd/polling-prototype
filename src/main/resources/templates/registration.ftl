@@ -1,4 +1,5 @@
 <#import "parts/common.ftl" as c>
+<#import "parts/login.ftl" as reg>
 
 <@c.page "Registration Page">
     <p>
@@ -14,10 +15,5 @@
     </div>
 
     <h4>Enter login and password for your account</h4>
-    <form action="/registration/add" method="POST">
-        <label> LOGIN : <input type="text" name="username"/> </label><br>
-        <label> PASSWORD: <input type="password" name="password"/> </label><br>
-        <input type="submit" value="Sign Up"/>
-        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
-    </form>
+    <@reg.form "registration/add" "Sign Up"/>
 </@c.page>
