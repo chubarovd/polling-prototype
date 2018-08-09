@@ -1,6 +1,6 @@
-<#import "parts/common.ftl" as c>
-<#import "parts/action_macro.ftl" as action>
-<#import "parts/login.ftl" as login>
+<#import "../parts/common.ftl" as c>
+<#import "../parts/action_macro.ftl" as action>
+<#import "../parts/login.ftl" as login>
 
 <@c.page "Login Page">
     <div>
@@ -11,5 +11,4 @@
 
     <h4>You need sign in to polling</h4>
     <@login.form "login" "Sign In"/>
-    <@action.debug "cleardb"/>
 </@c.page>

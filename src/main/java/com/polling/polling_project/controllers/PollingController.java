@@ -17,8 +17,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeParseException;
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,14 +36,12 @@ public class PollingController {
 
     @GetMapping("")
     public String viewPolling (@AuthenticationPrincipal User user, Model model) {
-        try {
-            if (ZonedDateTime.now().minusMinutes(1).compareTo(
-                    ZonedDateTime.parse(user.getLastPollTime())) < 0) {
-                model.addAttribute("access_denied", "You have already voted at this minute.");
-            }
-        } catch (DateTimeParseException e) {}
+        if (user.getLastPollTime() != null && Timestamp.valueOf(LocalDateTime.now().minusMonths(1)).compareTo(
+                user.getLastPollTime()) < 0) {
+            model.addAttribute("access_denied", "You have already voted today.");
+        }
         model.addAttribute ("items", itemRepo.findAll ());
-        return "polling";
+        return "user/polling";
     }
 
     @PostMapping ("/save_votes")
@@ -57,22 +57,14 @@ public class PollingController {
         votesRepo.deleteAll(votesRepo.findByAuthor(user));
         int i = 0;
         for (Item item : itemRepo.findAll ()) {
-            try {
-                votesRepo.save (
-                    new Vote ()
-                        .setAuthor (user)
-                        .setItem (item)
-                        .setCount (attributes.get("list").get (i++)));
-            } catch (IndexOutOfBoundsException e) {
-                votesRepo.save (
-                    new Vote()
-                        .setAuthor (user)
-                        .setItem (item)
-                        .setCount (0));
-            }
+            votesRepo.save (
+                new Vote ()
+                    .setAuthor (user)
+                    .setItem (item)
+                    .setCount (attributes.get("list").get (i++)));
         }
 
-        userRepo.updateLastPollTime (user.getId(), ZonedDateTime.now ().toString ());
+        userRepo.save(user.setLastPollTime(Date.valueOf(LocalDate.now())));
         return new ResponseEntity<> (HttpStatus.OK);
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.Set;
 
@@ -17,7 +18,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private Boolean active;
-    private String lastPollTime;
+    private Date lastPollTime;
     private Integer votesLimit;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
@@ -73,10 +74,10 @@ public class User implements UserDetails {
         return this;
     }
 
-    public String getLastPollTime() {
+    public Date getLastPollTime() {
         return lastPollTime;
     }
-    public User setLastPollTime(String lastPollTime) {
+    public User setLastPollTime(Date lastPollTime) {
         this.lastPollTime = lastPollTime;
         return this;
     }

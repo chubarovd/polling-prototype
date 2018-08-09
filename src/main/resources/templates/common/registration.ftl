@@ -1,5 +1,5 @@
-<#import "parts/common.ftl" as c>
-<#import "parts/login.ftl" as reg>
+<#import "../parts/common.ftl" as c>
+<#import "../parts/login.ftl" as reg>
 
 <@c.page "Registration Page">
     <p>

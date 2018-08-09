@@ -1,14 +1,14 @@
-<#macro debug action>
-    <form action="/debug/${action}" method="post">
+<#macro post_form action button>
+    <form action="${action}" method="post">
         <#nested>
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <input type="submit" value="${action}"/>
+        <input type="submit" value="${button}"/>
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     </form>
 </#macro>
 
 <#macro logout>
     <form action="/logout" method="post">
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
         <input type="submit" value="Sign Out"/>
+        <input type="hidden" name="_csrf" value="${_csrf.token}"/>
     </form>
 </#macro>

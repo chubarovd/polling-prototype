@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 @Controller
@@ -19,23 +23,18 @@ public class RegistrationController {
     @Autowired
     private UserRepo userRepo;
 
-    @GetMapping
-    public String viewRegistration () {
-        return "registration";
-    }
-
     @PostMapping("/add")
     public String addUser(User user, Model model, RedirectAttributes redirectAttrs) {
         if (userRepo.findByUsername (user.getUsername ()) != null) {
             model.addAttribute ("message", "This user is already exist");
-            return "registration";
+            return "common/registration";
         }
 
         userRepo.save(
             user
                 .setActive (true)
                 .setVotesLimit(10)
-                .setLastPollTime("")
+                .setLastPollTime(Date.valueOf(LocalDate.now().minusMonths(2l)))
                 .setRoles (Collections.singleton (Role.USER)));
 
         redirectAttrs.addFlashAttribute ("user", user);

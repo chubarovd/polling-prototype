@@ -13,6 +13,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 public interface VotesRepo extends JpaRepository<Vote, Long> {
-     List<Vote> findByAuthor(User user);
-     List<Vote> findByItem (Item item);
+    List<Vote> findByAuthor(User user);
+    List<Vote> findByItem (Item item);
 }
