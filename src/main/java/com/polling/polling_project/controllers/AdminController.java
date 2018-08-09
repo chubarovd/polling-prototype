@@ -35,6 +35,13 @@ public class AdminController {
         return "admin/main";
     }
 
+    @PostMapping("/delete/{userId}")
+    public String deleteItem(@PathVariable("userId") User user) {
+        votesRepo.deleteAll(votesRepo.findByAuthor(user));
+        userRepo.delete(user);
+        return "redirect:/admin";
+    }
+
     @GetMapping("/items")
     public String editItems(Model model) {
         List<Integer> summary = new ArrayList();

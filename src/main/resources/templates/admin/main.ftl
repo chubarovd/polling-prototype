@@ -1,9 +1,9 @@
 <#import "../parts/common.ftl" as c>
-<#import "../parts/action_macro.ftl" as action>
+<#import "../parts/action_macro.ftl" as am>
 
 <@c.page "Admin Console">
     <div>
-        <@action.logout />
+        <@am.logout />
     </div>
     User list
     <table>
@@ -24,6 +24,7 @@
                     <th>< <#list user.roles as role>${role}<#sep>, </#list> ></th>
                     <th>< ${user.lastPollTime} ></th>
                     <th><a href="admin/edit/${user.id}">< edit ></a></th>
+                    <th> <@am.post_form "/admin/delete/${user.id}" "delete"/> </th>
                 </tr>
             </#list>
         </tbody>
