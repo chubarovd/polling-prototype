@@ -43,8 +43,8 @@ public class AdminController {
     }
 
     @GetMapping("/items")
-    public String editItems(Model model) {
-        List<Integer> summary = new ArrayList();
+    public String viewItemsEdit(Model model) {
+        ArrayList<Integer> summary = new ArrayList<>();
         for (Item item : itemRepo.findAll()) {
             int temp = 0;
             for (Vote vote : votesRepo.findByItem(item)) {
@@ -72,7 +72,7 @@ public class AdminController {
     }
 
     @GetMapping("/edit/{user}")
-    public String editUserInfo(@PathVariable User user, Model model) {
+    public String viewUserEdit(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         model.addAttribute("votes", votesRepo.findByAuthor(user));
@@ -83,8 +83,6 @@ public class AdminController {
     public String setUserInfo(@RequestParam String username,
                               @RequestParam String password,
                               @RequestParam Role role,
-                              /*@RequestParam Boolean active,
-                              @RequestParam Boolean resetLastTime,*/
                               @RequestParam("userId") User user) {
         user.getRoles().clear();
         try {
@@ -92,18 +90,16 @@ public class AdminController {
         } catch(IllegalArgumentException e) {
             return "redirect:/admin/edit/" + user.getId();
         }
-        /*if (resetLastTime) user.setLastPollTime (Date.valueOf (LocalDate.now ().minusMonths (2l)));*/
         userRepo.save(
                 user.setUsername(username)
-                    .setPassword(password)
-                    /*.setActive(active)*/);
+                    .setPassword(password));
 
         return "redirect:/admin";
     }
 
     @PostMapping("/edit/clear_votes")
     public String clearVotes(@RequestParam("id") User user) {
-        user.setLastPollTime(Date.valueOf(LocalDate.now().minusMonths(2l)));
+        user.setLastPollTime(Date.valueOf(LocalDate.now().minusMonths(2)));
         userRepo.save(user);
         votesRepo.deleteAll(votesRepo.findByAuthor(user));
         return "redirect:/admin/edit/" + user.getId();

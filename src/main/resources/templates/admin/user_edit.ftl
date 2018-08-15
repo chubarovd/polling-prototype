@@ -27,7 +27,7 @@
             <input type="hidden" name="id" value="${user.id}"/>
         </@>
     </h2>
-    <p>last vote time: ${user.lastPollTime}</p>
+    <p>last vote time: ${user.lastPollTime!''}</p>
     <div>
         <table>
             <thead>

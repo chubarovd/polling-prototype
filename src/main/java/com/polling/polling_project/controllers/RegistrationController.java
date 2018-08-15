@@ -25,19 +25,19 @@ public class RegistrationController {
 
     @PostMapping("/add")
     public String addUser(User user, Model model, RedirectAttributes redirectAttrs) {
-        if (userRepo.findByUsername (user.getUsername ()) != null) {
-            model.addAttribute ("message", "This user is already exist");
+        if (userRepo.findByUsername(user.getUsername()) != null) {
+            model.addAttribute("message", "This user is already exist");
             return "common/registration";
         }
 
         userRepo.save(
             user
-                .setActive (true)
+                .setActive(true)
                 .setVotesLimit(10)
                 .setLastPollTime(Date.valueOf(LocalDate.now().minusMonths(2l)))
-                .setRoles (Collections.singleton (Role.USER)));
+                .setRoles(Collections.singleton(Role.USER)));
 
-        redirectAttrs.addFlashAttribute ("user", user);
+        redirectAttrs.addFlashAttribute("user", user);
         return "redirect:/login";
     }
 }

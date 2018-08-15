@@ -14,7 +14,7 @@ create table user_role (
 create table user_table (
   id int8 not null,
   active boolean,
-  last_poll_time date,
+  last_poll_time date not null,
   password varchar(255) not null,
   username varchar(255) not null,
   votes_limit int4,
@@ -24,8 +24,8 @@ create table user_table (
 create table votes_table (
   id int8 not null,
   count int4,
-  user_id int8,
-  item_id int8,
+  user_id int8 not null,
+  item_id int8 not null,
   primary key (id)
 );
 
