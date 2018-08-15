@@ -38,13 +38,17 @@
                 </tr>
             </thead>
             <tbody>
-                <#list votes as vote>
-                    <tr>
-                        <th><p> ${vote.id} </p></th>
-                        <th><p> ${vote.item} [id: ${vote.item.id}] </p></th>
-                        <th><p> ${vote.count} </p></th>
-                    </tr>
-                </#list>
+                <#if votes??>
+                    <#list votes as vote>
+                        <tr>
+                            <th><p> ${vote.id} </p></th>
+                            <th><p> ${vote.item} [id: ${vote.item.id}] </p></th>
+                            <th><p> ${vote.count} </p></th>
+                        </tr>
+                    </#list>
+                <#else>
+                    There is no votes yet.
+                </#if>
             </tbody>
         </table>
     </div>

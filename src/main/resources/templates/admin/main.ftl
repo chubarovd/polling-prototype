@@ -21,7 +21,7 @@
                 <tr>
                     <th>< ${user.id} ></th>
                     <th>< ${user.username} ></th>
-                    <th>< <#list user.roles as role>${role}<#sep>, </#list> ></th>
+                    <th>< <#list user.roles as role>${role}</#list> ></th>
                     <th>< ${user.lastPollTime} ></th>
                     <th><a href="admin/edit/${user.id}">< edit ></a></th>
                     <th> <@am.post_form "/admin/delete/${user.id}" "delete"/> </th>

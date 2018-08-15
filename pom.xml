@@ -25,7 +25,7 @@
 	</properties>
 
 	<dependencies>
-		<!--| Spring Framework |-->
+		<!--| Spring Framework |/-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
@@ -52,17 +52,23 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!--| Tomcat |-->
+		<!--| Tomcat |/-->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
 		</dependency>
 
-		<!--| PostgreSQL |-->
+		<!--| PostgreSQL |/-->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!--| FlyWay |/-->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
 		</dependency>
 	</dependencies>
 

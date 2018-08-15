@@ -1,9 +1,11 @@
 package com.polling.polling_project.domain;
 
+import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Set;
