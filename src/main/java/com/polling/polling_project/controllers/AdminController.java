@@ -7,11 +7,14 @@ import com.polling.polling_project.domain.Vote;
 import com.polling.polling_project.repos.ItemRepo;
 import com.polling.polling_project.repos.UserRepo;
 import com.polling.polling_project.repos.VotesRepo;
+import com.polling.polling_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -25,26 +28,26 @@ public class AdminController {
     @Autowired
     private ItemRepo itemRepo;
     @Autowired
-    private UserRepo userRepo;
-    @Autowired
     private VotesRepo votesRepo;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public String adminMainView(Model model) {
-        model.addAttribute("users", userRepo.findAll());
+        model.addAttribute("users", userService.findAll());
         return "admin/main";
     }
 
     @PostMapping("/delete/{userId}")
     public String deleteItem(@PathVariable("userId") User user) {
         votesRepo.deleteAll(votesRepo.findByAuthor(user));
-        userRepo.delete(user);
+        userService.delete(user);
         return "redirect:/admin";
     }
 
     @GetMapping("/items")
     public String viewItemsEdit(Model model) {
-        ArrayList<Integer> summary = new ArrayList<>();
+        List<Integer> summary = new ArrayList<>();
         for (Item item : itemRepo.findAll()) {
             int temp = 0;
             for (Vote vote : votesRepo.findByItem(item)) {
@@ -83,24 +86,32 @@ public class AdminController {
     public String setUserInfo(@RequestParam String username,
                               @RequestParam String password,
                               @RequestParam Role role,
-                              @RequestParam("userId") User user) {
-        user.getRoles().clear();
+                              @RequestParam("userId") User user,
+                              RedirectAttributes redirectAttributes) {
+
         try {
-            user.getRoles().add(role);
+            if(!StringUtils.isEmpty(username) && !StringUtils.isEmpty(password)) {
+                userService.saveUser(user, username, password, role);
+            } else {
+                redirectAttributes.addFlashAttribute("message", "Username and password should be not null");
+                return "redirect:/admin/edit/" + user.getId();
+            }
         } catch(IllegalArgumentException e) {
             return "redirect:/admin/edit/" + user.getId();
         }
-        userRepo.save(
-                user.setUsername(username)
-                    .setPassword(password));
-
         return "redirect:/admin";
     }
 
     @PostMapping("/edit/clear_votes")
     public String clearVotes(@RequestParam("id") User user) {
-        user.setLastPollTime(Date.valueOf(LocalDate.now().minusMonths(2)));
-        userRepo.save(user);
+        userService.saveUser(
+            user.setLastPollTime(
+                Date.valueOf(
+                    LocalDate.now()
+                             .minusMonths(2)
+                )
+            )
+        );
         votesRepo.deleteAll(votesRepo.findByAuthor(user));
         return "redirect:/admin/edit/" + user.getId();
     }

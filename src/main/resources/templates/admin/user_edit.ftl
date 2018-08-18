@@ -8,17 +8,18 @@
     <h3>User [id: ${user.id}] info</h3>
     <@am.post_form "/admin/edit" "Save">
         <input type="hidden" name="userId" value="${user.id}"/>
-        <label>USERNAME: <input type="text" name="username" value="${user.username}"/></label><br>
-        <label>PASSWORD: <input type="password" name="password" value="${user.password}"/></label><br>
+        <div>
+            <label>USERNAME: <input type="text" name="username" value="${user.username}"/></label><br>
+            <label>PASSWORD: <input type="password" name="password" value="${user.password}"/></label>
+        </div>
+        <div>
+            <#if message??>
+                <h4><span style="color: #ce0f0d">${message}</span></h4>
+            </#if>
+        </div>
         <#list roles as role>
             <label><input type="radio" name="role" value="${role}" ${user.roles?seq_contains(role)?string("checked", "")}/>${role}</label>
         </#list><br>
-        <!--<label>IS ACTIVE:
-            <input type="checkbox" name="active" value=""/>
-        </label>
-        <label>RESET LAST TIME:
-            <input type="checkbox" name="resetLastTime"/>
-        </label>-->
     </@am.post_form>
         <label>VOTES LIMIT: ${user.votesLimit}</label>
     <h2>
