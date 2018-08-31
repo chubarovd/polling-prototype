@@ -21,15 +21,15 @@
             <label><input type="radio" name="role" value="${role}" ${user.roles?seq_contains(role)?string("checked", "")}/>${role}</label>
         </#list><br>
     </@am.post_form>
-        <label>VOTES LIMIT: ${user.votesLimit}</label>
-    <h2>
-        User's votes
+    <label>VOTES LIMIT: ${user.votesLimit}</label>
+    <div>
+        <h2>
+            Last user's votes
         <@am.post_form "/admin/edit/clear_votes" "Clear Votes">
             <input type="hidden" name="id" value="${user.id}"/>
         </@>
-    </h2>
-    <p>last vote time: ${user.lastPollTime!''}</p>
-    <div>
+        </h2>
+        <p>last vote time: ${user.lastPollTime!''}</p>
         <table>
             <thead>
                 <tr>
@@ -44,6 +44,33 @@
                         <tr>
                             <th><p> ${vote.id} </p></th>
                             <th><p> ${vote.item} [id: ${vote.item.id}] </p></th>
+                            <th><p> ${vote.count} </p></th>
+                        </tr>
+                    </#list>
+                <#else>
+                    There is no votes yet.
+                </#if>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h2>
+            User's polling history
+        </h2>
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Item</th>
+                <th>Votes</th>
+            </tr>
+            </thead>
+            <tbody>
+                <#if oldVotes??>
+                    <#list oldVotes as vote>
+                        <tr>
+                            <th><p> ${vote.id} </p></th>
+                            <th><p> ${vote.content} </p></th>
                             <th><p> ${vote.count} </p></th>
                         </tr>
                     </#list>

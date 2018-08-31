@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-public interface VotesRepo extends JpaRepository<Vote, Long> {
+public interface IVoteRepo extends JpaRepository<Vote, Long> {
     List<Vote> findByAuthor(User user);
     List<Vote> findByItem(Item item);
 }

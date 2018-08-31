@@ -9,6 +9,7 @@
         <#if access_denied??>
             <h3>${access_denied}</h3>
         <#else>
+            <h4><span id="message" style="color: #ce0f0d; "/></h4>
             <div>
                 <script type="text/javascript" src="../js/poll.js"></script>
                 <table id="table"><h4>Task list</h4>

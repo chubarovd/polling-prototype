@@ -2,6 +2,7 @@ package com.polling.polling_project.config;
 
 import com.polling.polling_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -12,7 +13,6 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
@@ -21,24 +21,29 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
-                .antMatchers("/", "/registration", "/debug/cleardb", "/registration/add", "/login")
-                .permitAll()
-                .anyRequest().authenticated()
-            .and()
-                .formLogin()
-                .loginPage("/login")
-                .defaultSuccessUrl("/")
-                .permitAll()
-            .and()
-                .logout()
-                .logoutUrl("/logout")
-                .permitAll();
+            .antMatchers(
+                    "/",
+                    "/registration",
+                    "/debug/cleardb",
+                    "/registration/add",
+                    "/login")
+            .permitAll()
+            .anyRequest().authenticated()
+        .and()
+            .formLogin()
+            .loginPage("/login")
+            .defaultSuccessUrl("/")
+            .permitAll()
+        .and()
+            .logout()
+            .logoutUrl("/logout")
+            .permitAll();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService (userService)
-            .passwordEncoder(NoOpPasswordEncoder.getInstance());
+        auth.userDetailsService(userService)
+                .passwordEncoder(NoOpPasswordEncoder.getInstance());
     }
 }
 

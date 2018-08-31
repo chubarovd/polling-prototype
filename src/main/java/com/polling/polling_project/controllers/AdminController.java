@@ -4,9 +4,9 @@ import com.polling.polling_project.domain.Item;
 import com.polling.polling_project.domain.Role;
 import com.polling.polling_project.domain.User;
 import com.polling.polling_project.domain.Vote;
-import com.polling.polling_project.repos.ItemRepo;
-import com.polling.polling_project.repos.UserRepo;
-import com.polling.polling_project.repos.VotesRepo;
+import com.polling.polling_project.repos.IItemRepo;
+import com.polling.polling_project.repos.IVoteRepo;
+import com.polling.polling_project.service.OldVoteService;
 import com.polling.polling_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,8 +16,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +24,14 @@ import java.util.List;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
     @Autowired
-    private ItemRepo itemRepo;
+    private IItemRepo itemRepo;
     @Autowired
-    private VotesRepo votesRepo;
+    private IVoteRepo voteRepo;
+    @Autowired
+    private OldVoteService oldVoteService;
     @Autowired
     private UserService userService;
+
 
     @GetMapping
     public String adminMainView(Model model) {
@@ -40,7 +41,7 @@ public class AdminController {
 
     @PostMapping("/delete/{userId}")
     public String deleteItem(@PathVariable("userId") User user) {
-        votesRepo.deleteAll(votesRepo.findByAuthor(user));
+        voteRepo.deleteAll(voteRepo.findByAuthor(user));
         userService.delete(user);
         return "redirect:/admin";
     }
@@ -48,12 +49,13 @@ public class AdminController {
     @GetMapping("/items")
     public String viewItemsEdit(Model model) {
         List<Integer> summary = new ArrayList<>();
-        for (Item item : itemRepo.findAll()) {
-            int temp = 0;
-            for (Vote vote : votesRepo.findByItem(item)) {
-                temp += vote.getCount();
-            }
-            summary.add(temp);
+
+        for(Item item : itemRepo.findAll()) {
+            summary.add(
+                    voteRepo.findByItem(item).parallelStream()
+                            .mapToInt(Vote::getCount)
+                            .sum()
+            );
         }
 
         model.addAttribute("items", itemRepo.findAll());
@@ -63,7 +65,7 @@ public class AdminController {
 
     @PostMapping("/items/delete/{itemId}")
     public String deleteItem(@PathVariable("itemId") Item item) {
-        votesRepo.deleteAll(votesRepo.findByItem(item));
+        voteRepo.deleteAll(voteRepo.findByItem(item));
         itemRepo.delete(item);
         return "redirect:/admin/items";
     }
@@ -78,7 +80,8 @@ public class AdminController {
     public String viewUserEdit(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
-        model.addAttribute("votes", votesRepo.findByAuthor(user));
+        model.addAttribute("votes", voteRepo.findByAuthor(user));
+        model.addAttribute("oldVotes", oldVoteService.findByAuthor(user));
         return "admin/user_edit";
     }
 
@@ -104,15 +107,11 @@ public class AdminController {
 
     @PostMapping("/edit/clear_votes")
     public String clearVotes(@RequestParam("id") User user) {
-        userService.saveUser(
-            user.setLastPollTime(
-                Date.valueOf(
-                    LocalDate.now()
-                             .minusMonths(2)
-                )
-            )
-        );
-        votesRepo.deleteAll(votesRepo.findByAuthor(user));
+        user.setLastPollTime(null);
+        userService.saveUser(user);
+        Iterable<Vote> oldVotes = voteRepo.findByAuthor(user);
+        oldVoteService.saveAll(oldVotes);
+        voteRepo.deleteAll(oldVotes);
         return "redirect:/admin/edit/" + user.getId();
     }
 }
