@@ -20,12 +20,12 @@ public class OldVoteService {
     }
 
     public void save(Vote old) {
-        /*oldVoteRepo.save(
+        oldVoteRepo.save(
                 OldVote.builder()
                         .author(old.getAuthor())
                         .content(old.getItem().getContent())
                         .count(old.getCount())
-                        .build());*/
+                        .build());
     }
 
     public Iterable<OldVote> findByAuthor(User user) {

@@ -1,6 +1,6 @@
 package com.polling.polling_project.service;
 
-import com.polling.polling_project.domain.Role;
+import com.polling.polling_project.domain.EUserRole;
 import com.polling.polling_project.domain.User;
 import com.polling.polling_project.repos.IUserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
         userRepo.save(user);
     }
 
-    public void saveUser(User user, String username, String password, Role role) throws IllegalArgumentException {
+    public void saveUser(User user, String username, String password, EUserRole role) throws IllegalArgumentException {
         user.getRoles().clear();
         user.getRoles().add(role);
 

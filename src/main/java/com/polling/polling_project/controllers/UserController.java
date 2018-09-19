@@ -1,12 +1,16 @@
 package com.polling.polling_project.controllers;
 
+import com.fasterxml.jackson.databind.ser.Serializers;
 import com.polling.polling_project.domain.Item;
 import com.polling.polling_project.domain.User;
 import com.polling.polling_project.domain.Vote;
+import com.polling.polling_project.repos.IFeaturesRepo;
 import com.polling.polling_project.repos.IItemRepo;
 import com.polling.polling_project.repos.IUserRepo;
 import com.polling.polling_project.repos.IVoteRepo;
+import com.polling.polling_project.service.FeatureService;
 import com.polling.polling_project.service.OldVoteService;
+import com.polling.polling_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +28,10 @@ import java.util.*;
 @Controller
 @RequestMapping("/user")
 @PreAuthorize("hasAuthority('USER')")
-public class UserController {
-    @Autowired
-    private IUserRepo userRepo;
-    @Autowired
-    private IItemRepo itemRepo;
-    @Autowired
-    private IVoteRepo voteRepo;
-    @Autowired
-    private OldVoteService oldVoteService;
+public class UserController extends BaseController {
+    public UserController(IFeaturesRepo featuresRepo, IItemRepo itemRepo, IVoteRepo voteRepo, IUserRepo userRepo, FeatureService featureService, OldVoteService oldVoteService, UserService userService) {
+        super(featuresRepo, itemRepo, voteRepo, userRepo, featureService, oldVoteService, userService);
+    }
 
     @GetMapping("/polling")
     public String viewPolling(@AuthenticationPrincipal User user, Model model) {

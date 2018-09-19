@@ -1,11 +1,14 @@
 package com.polling.polling_project.controllers;
 
 import com.polling.polling_project.domain.Item;
-import com.polling.polling_project.domain.Role;
+import com.polling.polling_project.domain.EUserRole;
 import com.polling.polling_project.domain.User;
 import com.polling.polling_project.domain.Vote;
+import com.polling.polling_project.repos.IFeaturesRepo;
 import com.polling.polling_project.repos.IItemRepo;
+import com.polling.polling_project.repos.IUserRepo;
 import com.polling.polling_project.repos.IVoteRepo;
+import com.polling.polling_project.service.FeatureService;
 import com.polling.polling_project.service.OldVoteService;
 import com.polling.polling_project.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,16 +25,10 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 @PreAuthorize("hasAuthority('ADMIN')")
-public class AdminController {
-    @Autowired
-    private IItemRepo itemRepo;
-    @Autowired
-    private IVoteRepo voteRepo;
-    @Autowired
-    private OldVoteService oldVoteService;
-    @Autowired
-    private UserService userService;
-
+public class AdminController extends BaseController {
+    public AdminController(IFeaturesRepo featuresRepo, IItemRepo itemRepo, IVoteRepo voteRepo, IUserRepo userRepo, FeatureService featureService, OldVoteService oldVoteService, UserService userService) {
+        super(featuresRepo, itemRepo, voteRepo, userRepo, featureService, oldVoteService, userService);
+    }
 
     @GetMapping
     public String adminMainView(Model model) {
@@ -79,7 +76,7 @@ public class AdminController {
     @GetMapping("/edit/{user}")
     public String viewUserEdit(@PathVariable User user, Model model) {
         model.addAttribute("user", user);
-        model.addAttribute("roles", Role.values());
+        model.addAttribute("roles", EUserRole.values());
         model.addAttribute("votes", voteRepo.findByAuthor(user));
         model.addAttribute("oldVotes", oldVoteService.findByAuthor(user));
         return "admin/user_edit";
@@ -88,7 +85,7 @@ public class AdminController {
     @PostMapping("/edit")
     public String setUserInfo(@RequestParam String username,
                               @RequestParam String password,
-                              @RequestParam Role role,
+                              @RequestParam EUserRole role,
                               @RequestParam("userId") User user,
                               RedirectAttributes redirectAttributes) {
 
