@@ -13,18 +13,25 @@ import org.springframework.stereotype.Component;
 @Component
 abstract class BaseController {
     // autowire repos
-    protected final IFeaturesRepo featuresRepo;
-    protected final IItemRepo itemRepo;
-    protected final IVoteRepo voteRepo;
-    protected final IUserRepo userRepo;
+    final IFeaturesRepo featuresRepo;
+    final IItemRepo itemRepo;
+    final IVoteRepo voteRepo;
+    final IUserRepo userRepo;
 
     // autowire services
-    protected final FeatureService featureService;
-    protected final OldVoteService oldVoteService;
-    protected final UserService userService;
+    final FeatureService featureService;
+    final OldVoteService oldVoteService;
+    final UserService userService;
 
     @Autowired
-    public BaseController(IFeaturesRepo featuresRepo, IItemRepo itemRepo, IVoteRepo voteRepo, IUserRepo userRepo, FeatureService featureService, OldVoteService oldVoteService, UserService userService) {
+    public BaseController(
+            IFeaturesRepo featuresRepo,
+            IItemRepo itemRepo,
+            IVoteRepo voteRepo,
+            IUserRepo userRepo,
+            FeatureService featureService,
+            OldVoteService oldVoteService,
+            UserService userService) {
         this.featuresRepo = featuresRepo;
         this.itemRepo = itemRepo;
         this.voteRepo = voteRepo;
